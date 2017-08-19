@@ -1,0 +1,20 @@
+<project name="ant-project" default="all">
+
+	<property name="country", value="New Zealand"/>
+	<property name="city", value="Christchurch"/>
+	
+	<target name="print-city">
+		<echo message="The nicest place in the world is"/>
+		<echo message="${city}, ${country}"/>
+	</target>
+	
+	<target-name="print-math"/>
+		<echo message="Two plus two equals four."/>
+	</target>
+	
+	<target name="all" depends="print-city, print-math">
+		<echo message="Thank you!"/>
+	</target>
+
+</project>
+
