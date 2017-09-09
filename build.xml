@@ -1,20 +1,46 @@
-<project name="ant-project" default="all">
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HelloWorld" basedir="." default="main">
 
-	<property name="country", value="New Zealand"/>
-	<property name="city", value="Christchurch"/>
-	
-	<target name="print-city">
-		<echo message="The nicest place in the world is"/>
-		<echo message="${city}, ${country}"/>
+	<property name="src.dir" value="src" />
+
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+
+	<property name="main-class" value="HelloWorld" />
+
+	<target name="promptInput">
+		<input message="Please enter a number" addproperty="input" defaultvalue="50" />
+		<echo>User entered: ${input}</echo>
 	</target>
-	
-	<target-name="print-math"/>
-		<echo message="Two plus two equals four."/>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
 	</target>
-	
-	<target name="all" depends="print-city, print-math">
-		<echo message="Thank you!"/>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" />
 	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java jar="${jar.dir}/${ant.project.name}.jar" fork="true">
+			<arg value="${input}"/>
+		</java>
+	</target>
+
+	<target name="clean-build" depends="clean,jar" />
+
+	<target name="main" depends="clean,run" />
 
 </project>
 
